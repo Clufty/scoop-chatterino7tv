@@ -1,0 +1,27 @@
+{
+  "version": "6.9.3-nightly",
+  "description": "Chatterino 7TV nightly - Twitch chat client with 7TV emote and cosmetic support (formerly Chatterino7).",
+  "homepage": "https://github.com/SevenTV/chatterino7",
+  "license": "MIT",
+  "url": "https://github.com/SevenTV/chatterino7/releases/download/nightly-build/chatterino-windows-x86-64-Qt-6.9.3.zip",
+  "hash": "4affcf646aa13e77957f8506478074d3fba0b808abfef9583ee6f8430fbec6cc",
+  "shortcuts": [["chatterino.exe", "Chatterino 7TV"]],
+  "post_install": [
+    "if (!(Test-Path \"$dir\\modes\")) { New-Item \"$dir\\modes\" -ItemType File | Out-Null }",
+    "Set-Content \"$dir\\modes\" 'portable`nnightly'"
+  ],
+  "checkver": {
+    "script": [
+      "$r = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/releases/tags/nightly-build'",
+      "$a = $r.assets | Where-Object { $_.name -match 'chatterino-windows-x86-64-Qt-([\\d.]+)\\.zip' } | Select-Object -First 1",
+      "$qt = $Matches[1]",
+      "$date = ([datetime]$a.updated_at).ToString('yyyyMMddHHmm')",
+      "\"$qt-$date\""
+    ],
+    "regex": "(?<qt>[\\d.]+)-(?<date>\\d+)"
+  },
+  "autoupdate": {
+    "url": "https://github.com/SevenTV/chatterino7/releases/download/nightly-build/chatterino-windows-x86-64-Qt-$matchQt.zip",
+    "hash": { "type": "skip" }
+  }
+}
