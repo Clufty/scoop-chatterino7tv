@@ -60,7 +60,7 @@ scoop uninstall chatterino7tv
 
 - **Settings** — config is stored in `%APPDATA%\Chatterino2` and will persist across updates and uninstalls.
 - **Versioning** — the version string looks like `6.9.3-202604051423` (Qt version + timestamp of when the nightly asset was last updated). Scoop checks the GitHub API for changes and uses this to detect when a new nightly has been pushed.
-- **Hash skipping on updates** — the nightly reuses the same filename with new content on each build, so hash verification is skipped for updates. The initial install hash is pinned.
+- **Hash skipping** — the nightly reuses the same filename with new content on each build and no checksums file is published, so hash verification is skipped. You're trusting GitHub's release infrastructure directly.
 
 ## Disclaimer
 
