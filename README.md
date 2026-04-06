@@ -4,7 +4,7 @@
 
 A [Scoop](https://scoop.sh) bucket for **Chatterino 7TV** — a Twitch chat client with native [7TV](https://7tv.app) emote, paint, badge, and cosmetic support.
 
-The official portable build doesn't auto-update, so this bucket tracks the nightly and handles it for you.
+The official nightly build doesn't auto-update, so this bucket tracks it and handles that for you.
 
 > ⚠️ **Rename in progress** — This project is being renamed from *Chatterino7* to *Chatterino 7TV*, with the version scheme changing from `7.x.y` → `2.x.y`. The manifest will be updated as changes land upstream. See [SevenTV/chatterino7#323](https://github.com/SevenTV/chatterino7/issues/323).
 
@@ -58,9 +58,9 @@ scoop uninstall chatterino7tv
 
 ## Notes
 
-- **Portable mode** — config is stored next to the exe in `~\scoop\apps\chatterino7tv\current\`, not in AppData. Your settings survive updates.
+- **Settings** — config is stored in `%APPDATA%\Chatterino2` and will persist across updates and uninstalls.
 - **Versioning** — the version string looks like `6.9.3-202604051423` (Qt version + build timestamp). It changes with every nightly push, which is how Scoop detects that an update is available.
-- **Hash skipping on updates** — the nightly release reuses the same URL with new content on each build, and no checksums file is published alongside it, so hash verification is skipped for updates. The initial install hash is pinned.
+- **Hash skipping on updates** — the nightly release reuses the same URL with new content on each build and no checksums file is published alongside it, so hash verification is skipped for updates. The initial install hash is pinned.
 
 ## Disclaimer
 
