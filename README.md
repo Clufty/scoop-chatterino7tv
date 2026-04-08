@@ -10,7 +10,7 @@ The official [nightly build](https://github.com/SevenTV/chatterino7/releases/tag
 
 ---
 
-by **Cluft** &nbsp;·&nbsp; `Cluft` on Discord & 7TV &nbsp;·&nbsp; [`Clufti`](https://twitch.tv/Clufti) on Twitch &nbsp;·&nbsp; [`Clufty`](https://github.com/Clufty) on GitHub
+by **Cluft** &nbsp;·&nbsp; `Cluft` on Discord & 7TV &nbsp;·&nbsp; [`Clufti`](https://twitch.tv/Clufti) on Twitch
 
 </div>
 
@@ -50,6 +50,12 @@ Open **PowerShell** and run:
 
 ```powershell
 scoop update *
+```
+
+Or to update only Chatterino 7TV:
+
+```powershell
+scoop update chatterino7tv
 ```
 
 ## Uninstall
