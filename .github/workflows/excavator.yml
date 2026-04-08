@@ -15,30 +15,26 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install Scoop
+      - name: Check for new version and update manifest
         run: |
-          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-          irm get.scoop.sh | iex
-        shell: powershell
-
-      - name: Debug script output
-        run: |
-          $r = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/releases/tags/nightly-build'
-          $a = $r.assets | Where-Object { $_.name -match 'chatterino-windows-x86-64-Qt-([\d.]+)\.zip' } | Select-Object -First 1
-          Write-Host "Asset found: $($a.name)"
-          Write-Host "Updated at: $($a.updated_at)"
-          if ($a.name -match 'Qt-([\d.]+)\.zip') { $qt = $Matches[1] } else { $qt = 'unknown' }
-          $date = ([datetime]$a.updated_at).ToString('yyyyMMddHHmm')
-          Write-Host "Version would be: $qt-$date"
           $ref = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/git/ref/tags/nightly-build'
-          Write-Host "Current SHA: $($ref.object.sha.Substring(0,12))"
-          Write-Host "Manifest version: d0e5b9307703"
-        shell: powershell
+          $newSha = $ref.object.sha.Substring(0, 12)
+          Write-Host "Latest SHA: $newSha"
 
-      - name: Run checkver
-        run: |
-          $checkver = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkver.ps1"
-          & $checkver * -u -dir "${{ github.workspace }}\bucket"
+          $manifestPath = "${{ github.workspace }}\bucket\chatterino7tv.json"
+          $manifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
+          $currentVersion = $manifest.version
+          Write-Host "Current version: $currentVersion"
+
+          if ($newSha -ne $currentVersion) {
+            Write-Host "New version found, updating manifest..."
+            $content = Get-Content $manifestPath -Raw
+            $content = $content -replace '"version": "[^"]*"', """version"": ""$newSha"""
+            Set-Content $manifestPath $content
+            Write-Host "Manifest updated to $newSha"
+          } else {
+            Write-Host "Already up to date."
+          }
         shell: powershell
 
       - name: Commit updates
@@ -46,8 +42,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add bucket/
-          if (-not (git diff --staged --quiet)) {
-            git commit -m "chore: autoupdate manifests $(Get-Date -Format 'yyyy-MM-dd')"
+          $diff = git diff --staged --name-only
+          if ($diff) {
+            git commit -m "chore: update chatterino7tv to $(git diff HEAD~1 HEAD -- bucket/chatterino7tv.json | Select-String 'version' | Select-Object -First 1)"
             git push
           } else {
             Write-Host "No updates found."
