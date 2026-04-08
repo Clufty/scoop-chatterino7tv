@@ -14,7 +14,7 @@ A [Scoop](https://scoop.sh) bucket for [Chatterino 7TV](https://github.com/Seven
 
 ---
 
-[`Cluft`](https://7tv.app/users/01GTEW3G1G0001GW3P40Z5GQAV) on 7TV &nbsp;·&nbsp; `Cluft` on Discord &nbsp;·&nbsp; [`Clufti`](https://twitch.tv/Clufti) on Twitch &nbsp;·&nbsp; `Cluft` on Kick
+[`Cluft`](https://7tv.app/users/01GTEW3G1G0001GW3P40Z5GQAV) on 7TV &nbsp;·&nbsp; `Cluft` on Discord &nbsp;·&nbsp; [`Clufti`](https://twitch.tv/Clufti) on Twitch
 
 </div>
 
