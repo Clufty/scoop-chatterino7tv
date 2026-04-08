@@ -19,9 +19,11 @@ by **Cluft** &nbsp;·&nbsp; `Cluft` on Discord & 7TV &nbsp;·&nbsp; [`Clufti`](h
 ## Requirements
 
 - Windows 10 or later (x86-64)
-- [Scoop](https://scoop.sh) installed
+- PowerShell 5 or later (pre-installed on Windows 10+)
 
 ## Install
+
+Open **PowerShell** and run:
 
 **1. Install Scoop** (skip if you already have it):
 ```powershell
@@ -40,6 +42,7 @@ scoop install chatterino7tv/chatterino7tv
 ```
 
 ## Update
+
 ```powershell
 scoop update chatterino7tv
 ```
@@ -50,6 +53,7 @@ scoop update *
 ```
 
 ## Uninstall
+
 ```powershell
 scoop uninstall chatterino7tv
 ```
@@ -59,7 +63,7 @@ scoop uninstall chatterino7tv
 ## Notes
 
 - **Settings** — config is stored in `%APPDATA%\Chatterino2` and will persist across updates and uninstalls.
-- **Versioning** — the version string looks like `6.9.3-202604051423` (Qt version + timestamp of when the nightly asset was last updated). Scoop checks the GitHub API for changes and uses this to detect when a new nightly has been pushed.
+- **Versioning** — the version string is the first 12 characters of the nightly's git commit SHA (e.g. `4792f384a9dd`). A GitHub Action checks for a new SHA every 6 hours and automatically updates the manifest when a new nightly is pushed.
 - **Hash skipping** — the nightly reuses the same filename with new content on each build and no checksums file is published, so hash verification is skipped. You're trusting GitHub's release infrastructure directly.
 
 ## Disclaimer
