@@ -21,6 +21,17 @@ jobs:
           irm get.scoop.sh | iex
         shell: powershell
 
+      - name: Debug script output
+        run: |
+          $r = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/releases/tags/nightly-build'
+          $a = $r.assets | Where-Object { $_.name -match 'chatterino-windows-x86-64-Qt-([\d.]+)\.zip' } | Select-Object -First 1
+          Write-Host "Asset found: $($a.name)"
+          Write-Host "Updated at: $($a.updated_at)"
+          if ($a.name -match 'Qt-([\d.]+)\.zip') { $qt = $Matches[1] } else { $qt = 'unknown' }
+          $date = ([datetime]$a.updated_at).ToString('yyyyMMddHHmm')
+          Write-Host "Version would be: $qt-$date"
+        shell: powershell
+
       - name: Run checkver
         run: |
           $checkver = "$env:USERPROFILE\scoop\apps\scoop\current\bin\checkver.ps1"
