@@ -90,10 +90,8 @@ if ($output -match "Updating '([^']+)'") {
 }
 '@
 $script | Set-Content "$env:USERPROFILE\scoop-autoupdate-all.ps1"
-$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-all.ps1`""
-$trigger = New-ScheduledTaskTrigger -AtLogOn
-$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
-Register-ScheduledTask -TaskName "Scoop Auto Update All" -Action $action -Trigger $trigger -Settings $settings -Force
+$cmd = "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-all.ps1`""
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateAll" -Value $cmd
 ```
 
 ### Option B — Update only Chatterino 7TV on login
@@ -114,17 +112,31 @@ if ($output -match "Updating '([^']+)'") {
 }
 '@
 $script | Set-Content "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1"
-$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-chatterino.ps1`""
-$trigger = New-ScheduledTaskTrigger -AtLogOn
-$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
-Register-ScheduledTask -TaskName "Scoop Auto Update Chatterino" -Action $action -Trigger $trigger -Settings $settings -Force
+$cmd = "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-chatterino.ps1`""
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateChatterino" -Value $cmd
+```
+
+### Verify it's set up
+
+```powershell
+Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateAll"
+# or
+Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateChatterino"
+```
+
+### Test without logging out
+
+```powershell
+& "$env:USERPROFILE\scoop-autoupdate-all.ps1"
+# or
+& "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1"
 ```
 
 ### Remove auto-update *(works for either option)*
 
 ```powershell
-Unregister-ScheduledTask -TaskName "Scoop Auto Update All" -Confirm:$false -ErrorAction SilentlyContinue
-Unregister-ScheduledTask -TaskName "Scoop Auto Update Chatterino" -Confirm:$false -ErrorAction SilentlyContinue
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateAll" -ErrorAction SilentlyContinue
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateChatterino" -ErrorAction SilentlyContinue
 Remove-Item "$env:USERPROFILE\scoop-autoupdate-all.ps1" -ErrorAction SilentlyContinue
 Remove-Item "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1" -ErrorAction SilentlyContinue
 ```
