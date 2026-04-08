@@ -9,7 +9,7 @@
   "shortcuts": [["chatterino.exe", "Chatterino 7TV"]],
   "checkver": {
     "url": "https://api.github.com/repos/SevenTV/chatterino7/git/refs/tags/nightly-build",
-    "jsonpath": "$.object.sha",
+    "jsonpath": "$[0].object.sha",
     "regex": "^(?<sha>.{12})"
   },
   "autoupdate": {
