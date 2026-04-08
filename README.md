@@ -10,7 +10,7 @@ The official [nightly build](https://github.com/SevenTV/chatterino7/releases/tag
 
 ---
 
-by **Cluft** &nbsp;·&nbsp; `Cluft` on Discord & 7TV &nbsp;·&nbsp; [`Clufti`](https://twitch.tv/Clufti) on Twitch
+[`Cluft`](https://7tv.app/users/01GTEW3G1G0001GW3P40Z5GQAV) on Discord & 7TV &nbsp;·&nbsp; [`Clufti`](https://twitch.tv/Clufti) on Twitch &nbsp;·&nbsp; `Cluft` on Kick
 
 </div>
 
