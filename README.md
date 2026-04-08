@@ -70,9 +70,9 @@ scoop update chatterino7tv
 
 ## ⏰ Auto-update on login *(optional)*
 
-Run one of the setups below once in **PowerShell** — no admin needed. You'll get a Windows notification only when something actually updates, no noise if everything is already up to date.
+Run the setup below once in **PowerShell** — no admin needed. You'll get a Windows notification only when something actually updates, no noise if everything is already up to date.
 
-### Option A — Update everything on login *(recommended)*
+### Update everything on login
 
 ```powershell
 $script = @'
@@ -94,51 +94,22 @@ $cmd = "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateAll" -Value $cmd
 ```
 
-### Option B — Update only Chatterino 7TV on login
-
-```powershell
-$script = @'
-$output = & scoop update chatterino7tv 2>&1 | Out-String
-if ($output -match "Updating '([^']+)'") {
-    $updated = [regex]::Matches($output, "Updating '([^']+)'") | ForEach-Object { $_.Groups[1].Value }
-    $list = $updated -join ", "
-    Add-Type -AssemblyName System.Windows.Forms
-    $notify = New-Object System.Windows.Forms.NotifyIcon
-    $notify.Icon = [System.Drawing.SystemIcons]::Information
-    $notify.Visible = $true
-    $notify.ShowBalloonTip(8000, "Scoop updated", $list, [System.Windows.Forms.ToolTipIcon]::Info)
-    Start-Sleep -Seconds 9
-    $notify.Dispose()
-}
-'@
-$script | Set-Content "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1"
-$cmd = "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-chatterino.ps1`""
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateChatterino" -Value $cmd
-```
-
 ### Verify it's set up
 
 ```powershell
 Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateAll"
-# or
-Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateChatterino"
-```
 
 ### Test without logging out
 
 ```powershell
 & "$env:USERPROFILE\scoop-autoupdate-all.ps1"
-# or
-& "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1"
 ```
 
 ### Remove auto-update *(works for either option)*
 
 ```powershell
 Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateAll" -ErrorAction SilentlyContinue
-Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "ScoopAutoUpdateChatterino" -ErrorAction SilentlyContinue
 Remove-Item "$env:USERPROFILE\scoop-autoupdate-all.ps1" -ErrorAction SilentlyContinue
-Remove-Item "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1" -ErrorAction SilentlyContinue
 ```
 
 ---
