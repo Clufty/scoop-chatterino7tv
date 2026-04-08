@@ -19,35 +19,35 @@ by **Cluft** &nbsp;·&nbsp; `Cluft` on Discord & 7TV &nbsp;·&nbsp; [`Clufti`](h
 ## Requirements
 
 - Windows 10 or later (x86-64)
-- PowerShell 5 or later (pre-installed on Windows 10+)
+- PowerShell 5 or later
 
 ## Install
 
 Open **PowerShell** and run:
 
 **1. Install Scoop** (skip if you already have it):
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 irm get.scoop.sh | iex
 ```
 
 **2. Add this bucket:**
+
 ```powershell
 scoop bucket add chatterino7tv https://github.com/Clufty/scoop-chatterino7tv
 ```
 
 **3. Install:**
+
 ```powershell
 scoop install chatterino7tv/chatterino7tv
 ```
 
 ## Update
 
-```powershell
-scoop update chatterino7tv
-```
+Open **PowerShell** and run:
 
-To update everything at once:
 ```powershell
 scoop update *
 ```
@@ -63,8 +63,7 @@ scoop uninstall chatterino7tv
 ## Notes
 
 - **Settings** — config is stored in `%APPDATA%\Chatterino2` and will persist across updates and uninstalls.
-- **Versioning** — the version string is the first 12 characters of the nightly's git commit SHA (e.g. `4792f384a9dd`). A GitHub Action checks for a new SHA every 6 hours and automatically updates the manifest when a new nightly is pushed.
-- **Hash skipping** — the nightly reuses the same filename with new content on each build and no checksums file is published, so hash verification is skipped. You're trusting GitHub's release infrastructure directly.
+- **Auto-updates** — a GitHub Action checks for new nightly builds every 6 hours and updates the manifest automatically. Just run `scoop update *` to get the latest.
 
 ## Disclaimer
 
