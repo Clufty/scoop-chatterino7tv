@@ -23,7 +23,7 @@ A [Scoop](https://scoop.sh) bucket for [Chatterino 7TV](https://github.com/Seven
 ## ✅ Requirements
 
 - Windows 10 or later (x86-64)
-- PowerShell 5 or later
+- PowerShell 5 or later *(no admin needed)*
 
 ---
 
@@ -70,7 +70,9 @@ scoop update chatterino7tv
 
 ## ⏰ Auto-update on login *(optional)*
 
-Run this once in **PowerShell** to set up a scheduled task that automatically runs `scoop update *` on every login. You'll get a Windows notification only when something actually updates — no noise if everything is already up to date.
+Run one of the setups below once in **PowerShell** — no admin needed. You'll get a Windows notification only when something actually updates, no noise if everything is already up to date.
+
+### Option A — Update everything on login *(recommended)*
 
 ```powershell
 $script = @'
@@ -87,15 +89,38 @@ if ($output -match "Updating '([^']+)'") {
     $notify.Dispose()
 }
 '@
-$script | Set-Content "$env:USERPROFILE\scoop-autoupdate.ps1"
-schtasks /create /tn "Scoop Auto Update" /tr "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate.ps1`"" /sc onlogon /f
+$script | Set-Content "$env:USERPROFILE\scoop-autoupdate-all.ps1"
+schtasks /create /tn "Scoop Auto Update All" /tr "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-all.ps1`"" /sc onlogon /f
 ```
 
-To remove the scheduled task later:
+### Option B — Update only Chatterino 7TV on login
 
 ```powershell
-schtasks /delete /tn "Scoop Auto Update" /f
-Remove-Item "$env:USERPROFILE\scoop-autoupdate.ps1"
+$script = @'
+$output = & scoop update chatterino7tv 2>&1 | Out-String
+if ($output -match "Updating '([^']+)'") {
+    $updated = [regex]::Matches($output, "Updating '([^']+)'") | ForEach-Object { $_.Groups[1].Value }
+    $list = $updated -join ", "
+    Add-Type -AssemblyName System.Windows.Forms
+    $notify = New-Object System.Windows.Forms.NotifyIcon
+    $notify.Icon = [System.Drawing.SystemIcons]::Information
+    $notify.Visible = $true
+    $notify.ShowBalloonTip(8000, "Scoop updated", $list, [System.Windows.Forms.ToolTipIcon]::Info)
+    Start-Sleep -Seconds 9
+    $notify.Dispose()
+}
+'@
+$script | Set-Content "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1"
+schtasks /create /tn "Scoop Auto Update Chatterino" /tr "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-chatterino.ps1`"" /sc onlogon /f
+```
+
+### Remove auto-update *(works for either option)*
+
+```powershell
+schtasks /delete /tn "Scoop Auto Update All" /f
+schtasks /delete /tn "Scoop Auto Update Chatterino" /f
+Remove-Item "$env:USERPROFILE\scoop-autoupdate-all.ps1" -ErrorAction SilentlyContinue
+Remove-Item "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1" -ErrorAction SilentlyContinue
 ```
 
 ---
