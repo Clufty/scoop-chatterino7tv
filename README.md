@@ -4,7 +4,7 @@
 
 A [Scoop](https://scoop.sh) bucket for **Chatterino 7TV** — a Twitch chat client with native [7TV](https://7tv.app) emote, paint, badge, and cosmetic support.
 
-The official nightly build doesn't auto-update, so this bucket tracks it and handles that for you.
+The official [nightly build](https://github.com/SevenTV/chatterino7/releases/tag/nightly-build) doesn't auto-update, so this bucket tracks it and handles that for you.
 
 > ⚠️ **Rename in progress** — This project is being renamed from *Chatterino7* to *Chatterino 7TV*, with the version scheme changing from `7.x.y` → `2.x.y`. The manifest will be updated as changes land upstream. See [SevenTV/chatterino7#323](https://github.com/SevenTV/chatterino7/issues/323).
 
