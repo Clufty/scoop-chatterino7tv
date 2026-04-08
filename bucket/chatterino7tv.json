@@ -4,7 +4,7 @@
   "homepage": "https://github.com/SevenTV/chatterino7",
   "license": "MIT",
   "url": "https://github.com/SevenTV/chatterino7/releases/download/nightly-build/chatterino-windows-x86-64-Qt-6.9.3.zip",
-  "hash": { "type": "skip" },
+  "no_hash_check": true,
   "extract_dir": "Chatterino2",
   "shortcuts": [["chatterino.exe", "Chatterino 7TV"]],
   "checkver": {
@@ -14,6 +14,6 @@
   },
   "autoupdate": {
     "url": "https://github.com/SevenTV/chatterino7/releases/download/nightly-build/chatterino-windows-x86-64-Qt-6.9.3.zip",
-    "hash": { "type": "skip" }
+    "no_hash_check": true
   }
 }
