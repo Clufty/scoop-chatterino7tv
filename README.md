@@ -90,7 +90,10 @@ if ($output -match "Updating '([^']+)'") {
 }
 '@
 $script | Set-Content "$env:USERPROFILE\scoop-autoupdate-all.ps1"
-schtasks /create /tn "Scoop Auto Update All" /tr "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-all.ps1`"" /sc onlogon /f
+$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-all.ps1`""
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
+Register-ScheduledTask -TaskName "Scoop Auto Update All" -Action $action -Trigger $trigger -Settings $settings -Force
 ```
 
 ### Option B — Update only Chatterino 7TV on login
@@ -111,14 +114,17 @@ if ($output -match "Updating '([^']+)'") {
 }
 '@
 $script | Set-Content "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1"
-schtasks /create /tn "Scoop Auto Update Chatterino" /tr "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-chatterino.ps1`"" /sc onlogon /f
+$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate-chatterino.ps1`""
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
+Register-ScheduledTask -TaskName "Scoop Auto Update Chatterino" -Action $action -Trigger $trigger -Settings $settings -Force
 ```
 
 ### Remove auto-update *(works for either option)*
 
 ```powershell
-schtasks /delete /tn "Scoop Auto Update All" /f
-schtasks /delete /tn "Scoop Auto Update Chatterino" /f
+Unregister-ScheduledTask -TaskName "Scoop Auto Update All" -Confirm:$false -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName "Scoop Auto Update Chatterino" -Confirm:$false -ErrorAction SilentlyContinue
 Remove-Item "$env:USERPROFILE\scoop-autoupdate-all.ps1" -ErrorAction SilentlyContinue
 Remove-Item "$env:USERPROFILE\scoop-autoupdate-chatterino.ps1" -ErrorAction SilentlyContinue
 ```
