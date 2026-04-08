@@ -44,7 +44,8 @@ jobs:
           git add bucket/
           $diff = git diff --staged --name-only
           if ($diff) {
-            git commit -m "chore: update chatterino7tv to $(git diff HEAD~1 HEAD -- bucket/chatterino7tv.json | Select-String 'version' | Select-Object -First 1)"
+            $manifest = Get-Content "${{ github.workspace }}\bucket\chatterino7tv.json" -Raw | ConvertFrom-Json
+            git commit -m "chore: update chatterino7tv to $($manifest.version)"
             git push
           } else {
             Write-Host "No updates found."
