@@ -11,7 +11,7 @@
     "script": [
       "$r = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/releases/tags/nightly-build'",
       "$a = $r.assets | Where-Object { $_.name -match 'chatterino-windows-x86-64-Qt-([\\d.]+)\\.zip' } | Select-Object -First 1",
-      "$qt = $Matches[1]",
+      "if ($a.name -match 'Qt-([\\d.]+)\\.zip') { $qt = $Matches[1] } else { $qt = 'unknown' }",
       "$date = ([datetime]$a.updated_at).ToString('yyyyMMddHHmm')",
       "\"$qt-$date\""
     ],
