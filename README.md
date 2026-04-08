@@ -68,6 +68,38 @@ scoop update chatterino7tv
 
 ---
 
+## ⏰ Auto-update on login *(optional)*
+
+Run this once in **PowerShell** to set up a scheduled task that automatically runs `scoop update *` on every login. You'll get a Windows notification only when something actually updates — no noise if everything is already up to date.
+
+```powershell
+$script = @'
+$output = & scoop update * 2>&1 | Out-String
+if ($output -match "Updating '([^']+)'") {
+    $updated = [regex]::Matches($output, "Updating '([^']+)'") | ForEach-Object { $_.Groups[1].Value }
+    $list = $updated -join ", "
+    Add-Type -AssemblyName System.Windows.Forms
+    $notify = New-Object System.Windows.Forms.NotifyIcon
+    $notify.Icon = [System.Drawing.SystemIcons]::Information
+    $notify.Visible = $true
+    $notify.ShowBalloonTip(8000, "Scoop updated", $list, [System.Windows.Forms.ToolTipIcon]::Info)
+    Start-Sleep -Seconds 9
+    $notify.Dispose()
+}
+'@
+$script | Set-Content "$env:USERPROFILE\scoop-autoupdate.ps1"
+schtasks /create /tn "Scoop Auto Update" /tr "powershell -WindowStyle Hidden -File `"$env:USERPROFILE\scoop-autoupdate.ps1`"" /sc onlogon /f
+```
+
+To remove the scheduled task later:
+
+```powershell
+schtasks /delete /tn "Scoop Auto Update" /f
+Remove-Item "$env:USERPROFILE\scoop-autoupdate.ps1"
+```
+
+---
+
 ## 🗑️ Uninstall
 
 ```powershell
