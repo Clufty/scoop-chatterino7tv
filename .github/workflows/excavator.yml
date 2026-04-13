@@ -17,21 +17,22 @@ jobs:
 
       - name: Check for new version and update manifest
         run: |
-          $ref = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/git/ref/tags/nightly-build'
-          $newSha = $ref.object.sha.Substring(0, 12)
-          Write-Host "Latest SHA: $newSha"
+          $release = Invoke-RestMethod 'https://api.github.com/repos/SevenTV/chatterino7/releases/tags/nightly-build'
+          $asset = $release.assets | Where-Object { $_.name -eq 'chatterino-windows-x86-64-Qt-6.9.3.zip' } | Select-Object -First 1
+          $newVersion = ([datetime]$asset.updated_at).ToString('yyyyMMddHHmmss')
+          Write-Host "Latest version: $newVersion"
 
           $manifestPath = "${{ github.workspace }}\bucket\chatterino7tv.json"
           $manifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
           $currentVersion = $manifest.version
           Write-Host "Current version: $currentVersion"
 
-          if ($newSha -ne $currentVersion) {
+          if ($newVersion -ne $currentVersion) {
             Write-Host "New version found, updating manifest..."
             $content = Get-Content $manifestPath -Raw
-            $content = $content -replace '"version": "[^"]*"', """version"": ""$newSha"""
+            $content = $content -replace '"version": "[^"]*"', """version"": ""$newVersion"""
             Set-Content $manifestPath $content
-            Write-Host "Manifest updated to $newSha"
+            Write-Host "Manifest updated to $newVersion"
           } else {
             Write-Host "Already up to date."
           }
