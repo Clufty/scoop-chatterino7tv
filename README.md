@@ -57,12 +57,14 @@ scoop install chatterino7tv/chatterino7tv
 Update everything at once *(recommended)*:
 
 ```powershell
+scoop update
 scoop update *
 ```
 
 Or update only Chatterino 7TV:
 
 ```powershell
+scoop update
 scoop update chatterino7tv
 ```
 
@@ -76,6 +78,7 @@ Run one of the setups below once in **PowerShell** — no admin needed. You'll g
 
 ```powershell
 $script = @'
+& scoop update | Out-Null
 $output = & scoop update * 2>&1 | Out-String
 if ($output -match "Updating '([^']+)'") {
     $updated = [regex]::Matches($output, "Updating '([^']+)'") | ForEach-Object { $_.Groups[1].Value }
@@ -98,6 +101,7 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Na
 
 ```powershell
 $script = @'
+& scoop update | Out-Null
 $output = & scoop update chatterino7tv 2>&1 | Out-String
 if ($output -match "Updating '([^']+)'") {
     $updated = [regex]::Matches($output, "Updating '([^']+)'") | ForEach-Object { $_.Groups[1].Value }
@@ -155,7 +159,7 @@ scoop uninstall chatterino7tv
 
 > **Settings** — Config is stored in `%APPDATA%\Chatterino2` and will persist across updates and uninstalls.
 
-> **Auto-updates** — A GitHub Action checks for new nightly builds every 6 hours and updates the manifest automatically. Just run `scoop update *` to get the latest.
+> **Auto-updates** — A GitHub Action checks for new nightly builds every 6 hours and updates the manifest automatically. Just run `scoop update` then `scoop update *` to get the latest.
 
 ---
 
