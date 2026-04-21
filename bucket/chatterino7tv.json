@@ -1,5 +1,5 @@
 {
-  "version": "20260412115250",
+  "version": "20260420200500",
   "description": "Chatterino 7TV nightly - Twitch chat client with 7TV emote and cosmetic support (formerly Chatterino7).",
   "homepage": "https://github.com/SevenTV/chatterino7",
   "license": "MIT",
@@ -18,4 +18,5 @@
     "no_hash_check": true
   }
 }
+
 
